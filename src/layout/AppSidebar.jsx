@@ -26,57 +26,47 @@ const navItems = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [
-      {
-        name: "Ecommerce",
-        path: "/",
-      },
-    ],
+     path:"/",
+    // subItems: [
+    //   {
+    //     name: "Ecommerce",
+    //     path: "/",
+    //   },
+    // ],
   },
   {
     icon: <CalenderIcon />,
     name: "Calendar",
-    path: "/calendar",
+    path: "/",
   },
   {
     icon: <UserCircleIcon />,
     name: "User Profile",
-    path: "/profile",
+    path: "/",
   },
   {
     icon: <ListIcon />,
     name: "Forms",
-    subItems: [
-      {
-        name: "Form Elements",
-        path: "/form-elements"
-      }
-    ]
+     path:"/",
+    // subItems: [
+    //   {
+    //     name: "Form Elements",
+    //     path: "/form-elements"
+    //   }
+    // ]
   },
   {
     icon: <TableIcon />,
     name: "Tables",
-    subItems: [
-      {
-        name: "Basic Tables",
-        path: "/basic-tables"
-      }
-    ]
+     path:"/",
+    // subItems: [
+    //   {
+    //     name: "Basic Tables",
+    //     path: "/basic-tables"
+    //   }
+    // ]
   },
-  {
-    icon: <PageIcon />,
-    name: "Pages",
-    subItems: [
-      {
-        name: "Blank Page",
-        path: "/blank"
-      },
-      {
-        name: "404 Error",
-        path: "/error-404"
-      }
-    ]
-  }
+  
 ];
 
 const othersItems = [
@@ -94,54 +84,54 @@ const othersItems = [
       }
     ]
   },
- {
-    icon: <BoxCubeIcon />,
-    name: "UI Elements",
-    subItems: [
-      {
-        name: "Alerts",
-        path: "/alerts"
-      },
-      {
-        name: "Avatar",
-        path: "/avatars"
-      },
-      {
-        name: "Badge",
-        path: "/badge"
-      },
-      {
-        name: "Buttons",
-        path: "/buttons"
-      },
-      {
-        name: "Images",
-        path: "/images"
-      },
-      {
-        name: "Videos",
-        path: "/videos"
-      }
-    ]
-  },
-  {
-    icon: <PlugInIcon />,
-    name: "Authentication",
-    subItems: [
-      {
-        name: "Sign In",
-        path: "/login"
-      },
-      {
-        name: "Sign Up",
-        path: "/register"
-      }
-    ]
-  }
+  // {
+  //   icon: <BoxCubeIcon />,
+  //   name: "UI Elements",
+  //   subItems: [
+  //     {
+  //       name: "Alerts",
+  //       path: "/alerts"
+  //     },
+  //     {
+  //       name: "Avatar",
+  //       path: "/avatars"
+  //     },
+  //     {
+  //       name: "Badge",
+  //       path: "/badge"
+  //     },
+  //     {
+  //       name: "Buttons",
+  //       path: "/buttons"
+  //     },
+  //     {
+  //       name: "Images",
+  //       path: "/images"
+  //     },
+  //     {
+  //       name: "Videos",
+  //       path: "/videos"
+  //     }
+  //   ]
+  // },
+  // {
+  //   icon: <PlugInIcon />,
+  //   name: "Authentication",
+  //   subItems: [
+  //     {
+  //       name: "Sign In",
+  //       path: "/login"
+  //     },
+  //     {
+  //       name: "Sign Up",
+  //       path: "/register"
+  //     }
+  //   ]
+  // }
 ];
 
 const AppSidebar = () => {
- const {
+  const {
     isExpanded,
     isMobileOpen,
     isHovered,
@@ -191,7 +181,7 @@ const AppSidebar = () => {
       const key = `${openSubmenu.type}-${openSubmenu.index}`;
       if (subMenuRefs.current[key]) {
         setSubMenuHeight(prev => ({
-         ...prev,
+          ...prev,
           [key]:
             subMenuRefs.current[key].scrollHeight
         }));
@@ -252,17 +242,8 @@ ${openSubmenu?.type === type &&
                       (isExpanded || isHovered || isMobileOpen)
                       &&
                       <ChevronDownIcon
-                        className={`
-ml-auto
-transition-transform
-${openSubmenu?.type === type &&
-                            openSubmenu?.index === index
-                            ?
-                            "rotate-180"
-                            :
-                            ""
-                          }
-`}
+                        className={`ml-auto transition-transform ${openSubmenu?.type === type && openSubmenu?.index === index
+                            ? "rotate-180": ""}`}
                       />
                     }
                   </button>
@@ -271,13 +252,9 @@ ${openSubmenu?.type === type &&
                   (
                     <Link
                       href={nav.path}
-                      className={`
-menu-item
-${isActive(nav.path)
+                      className={`menu-item ${isActive(nav.path)
                           ?
-                          "menu-item-active"
-                          :
-                          "menu-item-inactive"
+                          "menu-item-active" : "menu-item-inactive"
                         }
 `}
                     >
@@ -293,7 +270,7 @@ ${isActive(nav.path)
                   )
               }
               {
-                nav.subItems &&
+                nav.subItems && (isExpanded || isHovered || isMobileOpen) &&
                 (
                   <div
                     ref={(el) => {
@@ -318,7 +295,7 @@ ${isActive(nav.path)
                           <li key={item.name}>
                             <Link
                               href={item.path}
-                             className={`
+                              className={`
   flex items-center
   px-10
   py-2
@@ -328,11 +305,10 @@ ${isActive(nav.path)
   dark:text-gray-300
   hover:bg-gray-100
   dark:hover:bg-gray-800
-  ${
-    isActive(item.path)
-      ? "bg-brand-500 text-white dark:bg-brand-500 dark:text-white"
-      : ""
-  }
+  ${isActive(item.path)
+                                  ? "bg-brand-500 text-white dark:bg-brand-500 dark:text-white"
+                                  : ""
+                                }
 `}
                             >
                               {item.name}
@@ -345,36 +321,34 @@ ${isActive(nav.path)
                 )
               }
             </li>
-         ))
+          ))
         }
       </ul>
     )
   };
   return (
     <aside
-      className={`
+     className={`
 fixed top-0 left-0 z-50
 h-screen
+overflow-y-auto
+overflow-x-hidden
 bg-white
 dark:bg-gray-900
 border-r
 border-gray-200
 dark:border-gray-800
-transition-all
-${isExpanded || isHovered
-          ?
-          "w-[290px]"
-          :
-          "w-[90px]"
-        }
-${isMobileOpen
-          ?
-          "translate-x-0"
-          :
-          "-translate-x-full"
-        }
+transition-all duration-300
 
-lg:translate-x-0
+${isExpanded || isHovered
+? "lg:w-[290px] w-[290px]"
+: "lg:w-[90px]"
+}
+
+${isMobileOpen
+? "translate-x-0"
+: "-translate-x-full lg:translate-x-0"
+}
 
 `}
       onMouseEnter={() => !isExpanded && setIsHovered(true)}
@@ -402,12 +376,7 @@ lg:translate-x-0
         </h3>
         {renderMenuItems(othersItems, "others")}
       </div>
-      {
-        (isExpanded || isHovered)
-        &&
-        <SidebarWidget />
-
-      }
+     
     </aside>
   )
 }
