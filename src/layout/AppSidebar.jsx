@@ -21,6 +21,7 @@ import {
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
+import Image from "next/image";
 
 const navItems = [
   {
@@ -207,7 +208,7 @@ const AppSidebar = () => {
 
   const renderMenuItems = (items, type) => {
     return (
-      <ul className="flex flex-col gap-4">
+      <ul className="flex space-y-1 flex-col gap-4">
         {
           items.map((nav, index) => (
             <li key={nav.name}>
@@ -217,16 +218,9 @@ const AppSidebar = () => {
                     onClick={() =>
                       handleSubmenuToggle(index, type)
                     }
-                    className={`
-menu-item group
-${openSubmenu?.type === type &&
-                        openSubmenu?.index === index
-                        ?
-                        "menu-item-active"
-                        :
-                        "menu-item-inactive"
-                      }
-`}
+                    className={`menu-item group flex w-full items-centerb ${openSubmenu?.type === type && openSubmenu?.index === index
+                        ? "menu-item-active" : "menu-item-inactive"
+                      } `}
                   >
                     <span>
                       {nav.icon}
@@ -252,7 +246,7 @@ ${openSubmenu?.type === type &&
                   (
                     <Link
                       href={nav.path}
-                      className={`menu-item ${isActive(nav.path)
+                      className={`menu-item flex w-full items-center ${isActive(nav.path)
                           ?
                           "menu-item-active" : "menu-item-inactive"
                         }
@@ -295,21 +289,9 @@ ${openSubmenu?.type === type &&
                           <li key={item.name}>
                             <Link
                               href={item.path}
-                              className={`
-  flex items-center
-  px-10
-  py-2
-  rounded-lg
-  text-sm
-  text-gray-600
-  dark:text-gray-300
-  hover:bg-gray-100
-  dark:hover:bg-gray-800
-  ${isActive(item.path)
+                              className={`w-full flex items-center px-10 py-2 rounded-lg text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 ${isActive(item.path)
                                   ? "bg-brand-500 text-white dark:bg-brand-500 dark:text-white"
-                                  : ""
-                                }
-`}
+                                  : "" }`}
                             >
                               {item.name}
                             </Link>
@@ -328,50 +310,52 @@ ${openSubmenu?.type === type &&
   };
   return (
     <aside
-     className={`
-fixed top-0 left-0 z-50
-h-screen
-overflow-y-auto
-overflow-x-hidden
-bg-white
-dark:bg-gray-900
-border-r
-border-gray-200
-dark:border-gray-800
-transition-all duration-300
-
-${isExpanded || isHovered
-? "lg:w-[290px] w-[290px]"
-: "lg:w-[90px]"
-}
-
-${isMobileOpen
-? "translate-x-0"
-: "-translate-x-full lg:translate-x-0"
+     className={`fixed top-0 left-0 z-50 h-screen overflow-y-auto overflow-x-hidden bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 transition-all duration-300 ${isExpanded || isHovered ? "lg:w-[290px]" : "lg:w-[90px]" } ${isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
 }
 
 `}
       onMouseEnter={() => !isExpanded && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="p-5">
-        <h3 className="mb-5 text-xs uppercase text-gray-400">
+       {/* ===== Logo Start ===== */}
+   <div className="flex items-center justify-center border-b border-gray-200 dark:border-gray-800 py-3 lg:py-5">
+  <Link href="/" className="flex items-center gap-3">
+    <Image
+      src="/images/logo/logo-icon.svg"
+      alt="Logo"
+      width={36}
+      height={36}
+      priority
+    />
+
+    {(isExpanded || isHovered || isMobileOpen) && (
+      <span className="text-xl font-bold text-gray-900 dark:text-white">
+        Expense Tracker
+      </span>
+    )}
+  </Link>
+</div>
+    {/* ===== Logo End ===== */}
+      <div className="p-5 ">
+        <h3 className="mb-5  m-3 text-xs uppercase text-gray-400">
           {
             isExpanded || isHovered
               ?
               "Menu"
               :
-              <HorizontaLDots />
+              "Menu"
+              // <HorizontaLDots />
           }
         </h3>
         {renderMenuItems(navItems, "main")}
-        <h3 className="mt-8 mb-5 text-xs uppercase text-gray-400">
+        <h3 className="mt-8 m-3 text-xs uppercase text-gray-400">
           {
             isExpanded || isHovered
               ?
               "Others"
               :
-              <HorizontaLDots />
+              "Others"
+              // <HorizontaLDots />
           }
         </h3>
         {renderMenuItems(othersItems, "others")}

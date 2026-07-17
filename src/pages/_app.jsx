@@ -9,22 +9,31 @@ import { ThemeProvider } from "@/context/ThemeContext";
 
 import AuthGuard from "@/components/AuthGuard";
 import AdminLayout from "@/layout/AdminLayout";
+import { useRouter } from "next/router";
 
 const outfit = Outfit({
   subsets: ["latin"],
 });
 
+
 export default function App({ Component, pageProps }) {
+   const router = useRouter();
+  const authPages = ["/login", "/register"];
+  const isAuthPage = authPages.includes(router.pathname);
   return (
     <div className={outfit.className}>
       <ThemeProvider>
         <AuthProvider>
           <SidebarProvider>
-            <AuthGuard>
-              <AdminLayout>
+            {isAuthPage ? (
               <Component {...pageProps} />
-              </AdminLayout>
-            </AuthGuard>
+            ) : (
+              <AuthGuard>
+                <AdminLayout>
+                  <Component {...pageProps} />
+                </AdminLayout>
+              </AuthGuard>
+            )}
           </SidebarProvider>
         </AuthProvider>
       </ThemeProvider>
