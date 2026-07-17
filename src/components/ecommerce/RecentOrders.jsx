@@ -9,19 +9,10 @@ import Badge from "../ui/badge/Badge";
 import Image from "next/image";
 
 // Define the TypeScript interface for the table rows
-interface Product {
-  id: number; // Unique identifier for each product
-  name: string; // Product name
-  variants: string; // Number of variants (e.g., "1 Variant", "2 Variants")
-  category: string; // Category of the product
-  price: string; // Price of the product (as a string with currency symbol)
-  // status: string; // Status of the product
-  image: string; // URL or path to the product image
-  status: "Delivered" | "Pending" | "Canceled"; // Status of the product
-}
+
 
 // Define the table data using the interface
-const tableData: Product[] = [
+const tableData = [
   {
     id: 1,
     name: "MacBook Pro 13”",

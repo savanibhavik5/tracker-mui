@@ -1,7 +1,5 @@
-"use client";
 import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
-import { ApexOptions } from "apexcharts";
 import flatpickr from "flatpickr";
 import ChartTab from "../common/ChartTab";
 import { CalenderIcon } from "../../icons";
@@ -9,7 +7,7 @@ import { CalenderIcon } from "../../icons";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export default function StatisticsChart() {
-  const datePickerRef = useRef<HTMLInputElement>(null);
+  const datePickerRef = useRef(null);
 
   useEffect(() => {
     if (!datePickerRef.current) return;
@@ -38,7 +36,7 @@ export default function StatisticsChart() {
     };
   }, []);
 
-  const options: ApexOptions = {
+  const options = {
     legend: {
       show: false, // Hide legend
       position: "top",
@@ -154,7 +152,7 @@ export default function StatisticsChart() {
             Statistics
           </h3>
           <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-            Target you've set for each month
+            Target you have set for each month
           </p>
         </div>
         <div className="flex items-center gap-3 sm:justify-end">

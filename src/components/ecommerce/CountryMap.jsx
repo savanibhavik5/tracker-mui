@@ -4,35 +4,13 @@ import { worldMill } from "@react-jvectormap/world";
 import dynamic from "next/dynamic";
 
 const VectorMap = dynamic(
-  () => import("@react-jvectormap/core").then((mod) => mod.VectorMap),
+  () => import("@react-jvectormap/core").then((m) => m.VectorMap),
   { ssr: false }
 );
 
-// Define the component props
-interface CountryMapProps {
-  mapColor?: string;
-}
 
-type MarkerStyle = {
-  initial: {
-    fill: string;
-    r: number; // Radius for markers
-  };
-};
 
-type Marker = {
-  latLng: [number, number];
-  name: string;
-  style?: {
-    fill: string;
-    borderWidth: number;
-    borderColor: string;
-    stroke?: string;
-    strokeOpacity?: number;
-  };
-};
-
-const CountryMap: React.FC<CountryMapProps> = ({ mapColor }) => {
+const CountryMap = ({ mapColor }) => {
   return (
     <VectorMap
       map={worldMill}
@@ -43,7 +21,7 @@ const CountryMap: React.FC<CountryMapProps> = ({ mapColor }) => {
             fill: "#465FFF",
             r: 4, // Custom radius for markers
           }, // Type assertion to bypass strict CSS property checks
-        } as MarkerStyle
+        } 
       }
       markersSelectable={true}
       markers={
@@ -78,7 +56,7 @@ const CountryMap: React.FC<CountryMapProps> = ({ mapColor }) => {
               strokeOpacity: 0,
             },
           },
-        ] as Marker[]
+        ] 
       }
       zoomOnScroll={false}
       zoomMax={12}

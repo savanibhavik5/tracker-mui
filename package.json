@@ -3,7 +3,7 @@
   "version": "2.3.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint ."
@@ -30,12 +30,13 @@
     "googleapis": "^173.0.0",
     "jsonwebtoken": "^9.0.3",
     "jwt-decode": "^4.0.0",
-    "next": "^16.1.6",
-    "react": "^19.2.0",
+    "next": "^15.4.7",
+    "next-transpile-modules": "^10.0.1",
+    "react": "^19.1.0",
     "react-apexcharts": "^1.8.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
-    "react-dom": "^19.2.0",
+    "react-dom": "^19.1.0",
     "react-dropzone": "^14.3.8",
     "swiper": "^11.2.10",
     "tailwind-merge": "^2.6.0"

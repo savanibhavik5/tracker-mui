@@ -1,20 +1,16 @@
-"use client";
-// import Chart from "react-apexcharts";
-import { ApexOptions } from "apexcharts";
-
 import dynamic from "next/dynamic";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { MoreDotIcon } from "@/icons";
 import { useState } from "react";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
-// Dynamically import the ReactApexChart component
-const ReactApexChart = dynamic(() => import("react-apexcharts"), {
-  ssr: false,
-});
 
+const ReactApexChart = dynamic(
+  () => import("react-apexcharts"),
+  { ssr: false }
+);
 export default function MonthlyTarget() {
   const series = [75.55];
-  const options: ApexOptions = {
+  const options= {
     colors: ["#465FFF"],
     chart: {
       fontFamily: "Outfit, sans-serif",

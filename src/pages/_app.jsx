@@ -1,16 +1,14 @@
-// Global CSS
 import "@/app_backup/globals.css";
-
-// Third party CSS
 import "flatpickr/dist/flatpickr.css";
 
-// Font
 import { Outfit } from "next/font/google";
 
-// Context
 import AuthProvider from "@/context/AuthContext";
 import { SidebarProvider } from "@/context/SidebarContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+
+import AuthGuard from "@/components/AuthGuard";
+import AdminLayout from "@/layout/AdminLayout";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -22,7 +20,11 @@ export default function App({ Component, pageProps }) {
       <ThemeProvider>
         <AuthProvider>
           <SidebarProvider>
-            <Component {...pageProps} />
+            <AuthGuard>
+              <AdminLayout>
+              <Component {...pageProps} />
+              </AdminLayout>
+            </AuthGuard>
           </SidebarProvider>
         </AuthProvider>
       </ThemeProvider>
