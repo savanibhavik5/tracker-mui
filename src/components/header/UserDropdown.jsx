@@ -13,7 +13,6 @@ export default function UserDropdown() {
 const auth = useContext(AuthContext);
   const user = auth?.user;
   const logout = auth?.logout;
-  console.log(auth);
   const capitalizeName = (name = "") =>
   name
     .split(" ")
