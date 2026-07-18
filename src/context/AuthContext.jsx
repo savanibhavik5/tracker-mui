@@ -19,7 +19,7 @@ const isTokenValid = (token) => {
 
 export default function AuthProvider({ children }) {
   const router = useRouter();
-  // const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
   // const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -29,23 +29,23 @@ export default function AuthProvider({ children }) {
     setToken(null);
     setUser(null);
   };
-const [user, setUser] = useState(() => {
-  if (typeof window === "undefined") return null;
+// const [user, setUser] = useState(() => {
+//   if (typeof window === "undefined") return null;
 
-  try {
-    const data = localStorage.getItem("user");
+//   try {
+//     const data = localStorage.getItem("user");
 
-    if (!data || data === "undefined") {
-      return null;
-    }
+//     if (!data || data === "undefined") {
+//       return null;
+//     }
 
-    return JSON.parse(data);
-  } catch (err) {
-    console.error("Invalid user in localStorage:", err);
-    localStorage.removeItem("user");
-    return null;
-  }
-});
+//     return JSON.parse(data);
+//   } catch (err) {
+//     console.error("Invalid user in localStorage:", err);
+//     localStorage.removeItem("user");
+//     return null;
+//   }
+// });
 
 const [token, setToken] = useState(() => {
   if (typeof window === "undefined") return null;
@@ -54,19 +54,19 @@ const [token, setToken] = useState(() => {
 
   return token && token !== "undefined" ? token : null;
 });
-  // useEffect(() => {
-  //   const storedToken = localStorage.getItem("token");
-  //   const storedUser = localStorage.getItem("user");
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
 
-  //   if (storedToken && storedUser && isTokenValid(storedToken)) {
-  //     setToken(storedToken);
-  //     setUser(JSON.parse(storedUser));
-  //   } else {
-  //     clearAuth();
-  //   }
+    if (storedToken && storedUser && isTokenValid(storedToken)) {
+      setToken(storedToken);
+      setUser(JSON.parse(storedUser));
+    } else {
+      clearAuth();
+    }
 
-  //   setLoading(false);
-  // }, []);
+   
+  }, []);
 
   useEffect(() => {
     if (!token) return;

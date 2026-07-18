@@ -4,9 +4,24 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
+import { useContext } from "react";
+import { AuthContext } from "@/context/AuthContext";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
+
+const auth = useContext(AuthContext);
+  const user = auth?.user;
+  const logout = auth?.logout;
+  console.log(auth);
+  const capitalizeName = (name = "") =>
+  name
+    .split(" ")
+    .filter(Boolean)
+    .map(
+      word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    )
+    .join(" ");
 
 function toggleDropdown(e) {
   e.stopPropagation();
@@ -31,7 +46,9 @@ function toggleDropdown(e) {
           />
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm">Musharof</span>
+        <span className="block mr-1 font-medium text-theme-sm">
+  {user?.name ? capitalizeName(user.name) : "Guest"}
+</span>
 
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
@@ -60,10 +77,10 @@ function toggleDropdown(e) {
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-            Musharof Chowdhury
+           {user?.name ? capitalizeName(user.name) : "Guest"}
           </span>
           <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-            randomuser@pimjo.com
+            {user?.email || "randomuser@pimjo.com"}
           </span>
         </div>
 
@@ -102,8 +119,8 @@ function toggleDropdown(e) {
             </DropdownItem>
           </li>
         </ul>
-        <Link
-          href="/signin"
+        <Link onClick={logout}
+          href="/login"
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
         >
           
