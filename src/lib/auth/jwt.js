@@ -1,9 +1,6 @@
 import jwt from "jsonwebtoken";
 import { authConfig } from "@/config/auth";
 
-console.log("ACCESS:", process.env.JWT_ACCESS_SECRET);
-console.log("REFRESH:", process.env.JWT_REFRESH_SECRET);
-
 export function generateAccessToken(payload) {
   return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
     expiresIn: authConfig.accessToken.expiresIn,

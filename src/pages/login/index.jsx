@@ -7,13 +7,18 @@ import useAuth from "@/hooks/useAuth";
 export default function SignIn() {
   const router = useRouter();
 
-  const { login, token } = useAuth();
+  const { login, loading, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (token) {
-      router.replace("/");
+    if (!loading && isAuthenticated) {
+      router.replace("/dashboard");
     }
-  }, [token, router]);
+  }, [loading, isAuthenticated, router]);
+
+  if (loading) {
+    return null; // ya Loader component
+  }
+
   return (
     <AuthLayout title="Welcome Back" subtitle="Login to continue">
       <SignInForm onLogin={login} />

@@ -9,13 +9,14 @@ export default function AuthGuard({ children }) {
   const { user, loading } = useAuth();
 
   useEffect(() => {
-    if (!loading && !user && !PUBLIC_ROUTES.includes(router.pathname)) {
+    if (!loading && !user) {
       router.replace("/login");
     }
   }, [loading, user, router]);
 
-  if (loading) {
+  if (loading || !user) {
     return null;
   }
+
   return children;
 }

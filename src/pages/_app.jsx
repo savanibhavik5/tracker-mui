@@ -17,7 +17,7 @@ const outfit = Outfit({
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
-  const authPages = ["/login", "/register"];
+  const authPages = ["/login", "/signup"];
   const isAuthPage = authPages.includes(router.pathname);
   return (
     <div className={outfit.className}>

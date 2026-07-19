@@ -6,7 +6,7 @@ const AuthService = {
   },
 
   register(data) {
-    return api.post("/auth/register", data);
+    return api.post("/auth/signup", data);
   },
 
   refreshToken() {

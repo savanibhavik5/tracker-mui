@@ -119,7 +119,7 @@ const othersItems = [
   //     },
   //     {
   //       name: "Sign Up",
-  //       path: "/register"
+  //       path: "/signup"
   //     }
   //   ]
   // }
