@@ -11,6 +11,11 @@ import axios from "axios";
 export default function SignInForm({ onLogin }) {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
 
   const [formData, setFormData] = useState({
     email: "",
@@ -20,31 +25,62 @@ export default function SignInForm({ onLogin }) {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Common API error remove
+    setError("");
+
+    // Current field ka error remove
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+  };
+
+  const validate = () => {
+    const newErrors = {};
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    }
+
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required";
+    }
+
+    setErrors({
+      email: newErrors.email || "",
+      password: newErrors.password || "",
     });
+
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    if (!validate()) {
+      return;
+    }
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await axios.post("/api/auth/login", formData, {
         withCredentials: true,
       });
       const data = response.data;
+
       if (!data.success) {
-        alert(data.message);
+        setError(data.message);
         return;
       }
-      // Send user data to AuthContext
-      if (onLogin) {
-        onLogin(data);
-      }
+      onLogin?.(data);
     } catch (error) {
-      console.log(error);
-      alert(error.response?.data?.message || "Login failed");
+      setError(error.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -127,6 +163,9 @@ export default function SignInForm({ onLogin }) {
                   value={formData.email}
                   onChange={handleChange}
                 />
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                )}
               </div>
               <div>
                 <Label>
@@ -140,6 +179,7 @@ export default function SignInForm({ onLogin }) {
                     value={formData.password}
                     onChange={handleChange}
                   />
+
                   <span
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
@@ -150,6 +190,11 @@ export default function SignInForm({ onLogin }) {
                       <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
                     )}
                   </span>
+                  {errors.password && (
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.password}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="flex items-center justify-between">
@@ -166,9 +211,42 @@ export default function SignInForm({ onLogin }) {
                   Forgot password?
                 </Link>
               </div>
+              {error && (
+                <p className="text-sm text-red-500 text-center">{error}</p>
+              )}
               <div>
-                <Button className="w-full" size="sm">
-                  Sign in
+                <Button
+                  type="submit"
+                  className="w-full disabled:cursor-not-allowed disabled:opacity-70"
+                  size="sm"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg
+                        className="h-4 w-4 animate-spin"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                        />
+                      </svg>
+                      Signing in...
+                    </span>
+                  ) : (
+                    "Sign in"
+                  )}
                 </Button>
               </div>
             </div>

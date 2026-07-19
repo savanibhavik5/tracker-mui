@@ -25,11 +25,11 @@ export default function App({ Component, pageProps }) {
         <AuthProvider>
           <SidebarProvider>
             {isAuthPage ? (
-              <Component {...pageProps} />
+              <Component />
             ) : (
               <AuthGuard>
                 <AdminLayout>
-                  <Component {...pageProps} />
+                  <Component />
                 </AdminLayout>
               </AuthGuard>
             )}

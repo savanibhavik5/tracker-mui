@@ -28,6 +28,13 @@ export default function UserDropdown() {
   function closeDropdown() {
     setIsOpen(false);
   }
+
+  async function handleLogout(e) {
+    e.preventDefault();
+    closeDropdown();
+    await logout?.();
+  }
+
   return (
     <div className="relative">
       <button
@@ -113,13 +120,13 @@ export default function UserDropdown() {
             </DropdownItem>
           </li>
         </ul>
-        <Link
-          onClick={logout}
-          href="/login"
+        <button
+          type="button"
+          onClick={handleLogout}
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
         >
           Sign out
-        </Link>
+        </button>
       </Dropdown>
     </div>
   );
