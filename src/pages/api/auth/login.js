@@ -1,9 +1,6 @@
 import bcrypt from "bcryptjs";
 
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from "@/lib/auth/jwt";
+import { generateAccessToken, generateRefreshToken } from "@/lib/auth/jwt";
 
 import {
   createAccessTokenCookie,
@@ -66,10 +63,7 @@ export default async function handler(req, res) {
 
     const refreshCookie = createRefreshTokenCookie(refreshToken);
 
-    res.setHeader("Set-Cookie", [
-      accessCookie,
-      refreshCookie,
-    ]);
+    res.setHeader("Set-Cookie", [accessCookie, refreshCookie]);
 
     return res.status(200).json({
       success: true,

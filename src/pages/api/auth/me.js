@@ -2,7 +2,6 @@ import { parse } from "cookie";
 import { verifyAccessToken } from "@/lib/auth/jwt";
 
 export default async function handler(req, res) {
-
   if (req.method !== "GET") {
     return res.status(405).json({
       success: false,
@@ -11,7 +10,6 @@ export default async function handler(req, res) {
   }
 
   try {
-
     const cookies = parse(req.headers.cookie || "");
 
     const accessToken = cookies.accessToken;
@@ -29,19 +27,13 @@ export default async function handler(req, res) {
       success: true,
       user,
     });
-
   } catch (error) {
+    console.log(error);
+    console.log(error.message);
 
-  
-  console.log("========== ME API ==========");
-  console.log(error);
-  console.log(error.message);
-
-  return res.status(401).json({
-    success: false,
-    message: error.message,
-  });
-
+    return res.status(401).json({
+      success: false,
+      message: error.message,
+    });
   }
-
 }

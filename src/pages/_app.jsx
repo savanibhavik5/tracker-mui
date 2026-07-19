@@ -15,9 +15,8 @@ const outfit = Outfit({
   subsets: ["latin"],
 });
 
-
 export default function App({ Component, pageProps }) {
-   const router = useRouter();
+  const router = useRouter();
   const authPages = ["/login", "/register"];
   const isAuthPage = authPages.includes(router.pathname);
   return (

@@ -4,8 +4,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import useAuth from "@/hooks/useAuth";
 
-
-
 export default function SignIn() {
   const router = useRouter();
 
@@ -16,7 +14,9 @@ export default function SignIn() {
       router.replace("/");
     }
   }, [token, router]);
-  return  <AuthLayout title="Welcome Back" subtitle="Login to continue">
+  return (
+    <AuthLayout title="Welcome Back" subtitle="Login to continue">
       <SignInForm onLogin={login} />
     </AuthLayout>
+  );
 }

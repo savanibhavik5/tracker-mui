@@ -14,14 +14,13 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
     if (token) {
-      config.headers.Authorization =
-      `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Response Interceptor
@@ -43,34 +42,23 @@ api.interceptors.response.use(
     ) {
       originalRequest._retry = true;
       try {
-        const response =
-          await AuthService.refreshToken();
-        const newAccessToken =
-          response.data.accessToken;
+        const response = await AuthService.refreshToken();
+        const newAccessToken = response.data.accessToken;
         // Save new token
-        localStorage.setItem(
-          "accessToken",
-          newAccessToken
-        );
+        localStorage.setItem("accessToken", newAccessToken);
         // Update original request
-        originalRequest.headers.Authorization =
-          `Bearer ${newAccessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         // Retry failed API
         return api(originalRequest);
       } catch (refreshError) {
-        console.log(
-          "Refresh token expired",
-          refreshError
-        );
-        localStorage.removeItem(
-          "accessToken"
-        );
+        console.log("Refresh token expired", refreshError);
+        localStorage.removeItem("accessToken");
         window.location.href = "/login";
         return Promise.reject(refreshError);
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

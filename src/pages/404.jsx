@@ -4,8 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-
-
 export default function Error404() {
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden z-1">

@@ -1,7 +1,6 @@
 import { serialize } from "cookie";
 
 export const setAccessTokenCookie = (res, token) => {
-
   return serialize("accessToken", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -9,11 +8,9 @@ export const setAccessTokenCookie = (res, token) => {
     path: "/",
     maxAge: 60 * 15,
   });
-
 };
 
 export const setRefreshTokenCookie = (res, token) => {
-
   return serialize("refreshToken", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -21,7 +18,6 @@ export const setRefreshTokenCookie = (res, token) => {
     path: "/",
     maxAge: 60 * 60 * 24 * 30,
   });
-
 };
 
 export const createAccessTokenCookie = (token) => {
@@ -34,7 +30,7 @@ export const createAccessTokenCookie = (token) => {
   });
 };
 
-export  const createRefreshTokenCookie = (token) => {
+export const createRefreshTokenCookie = (token) => {
   return serialize("refreshToken", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -43,4 +39,3 @@ export  const createRefreshTokenCookie = (token) => {
     maxAge: 60 * 60 * 24 * 30, // 30 Days
   });
 };
-

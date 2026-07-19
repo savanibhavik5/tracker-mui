@@ -1,7 +1,7 @@
 import api from "./api";
 
 const AuthService = {
-   login(data) {
+  login(data) {
     return api.post("/auth/login", data);
   },
 
@@ -13,7 +13,7 @@ const AuthService = {
     return api.post("/auth/refreshToken");
   },
 
-   logout() {
+  logout() {
     return api.post("/auth/logout");
   },
 };

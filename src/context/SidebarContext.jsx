@@ -1,8 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-
-
 const SidebarContext = createContext(undefined);
 
 export const useSidebar = () => {
@@ -13,10 +11,7 @@ export const useSidebar = () => {
   return context;
 };
 
-
-export const SidebarProvider = ({
-  children,
-}) => {
+export const SidebarProvider = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -72,4 +67,3 @@ export const SidebarProvider = ({
     </SidebarContext.Provider>
   );
 };
-
