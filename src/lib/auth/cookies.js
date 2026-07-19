@@ -1,49 +1,46 @@
-import { stringifyCookie } from "cookie";
+import { serialize } from "cookie";
 
+export const setAccessTokenCookie = (res, token) => {
 
-export function setRefreshTokenCookie(res, token) {
+  return serialize("accessToken", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    path: "/",
+    maxAge: 60 * 15,
+  });
 
+};
 
-  
-  const isProduction =
-    process.env.NODE_ENV === "production";
+export const setRefreshTokenCookie = (res, token) => {
 
+  return serialize("refreshToken", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 30,
+  });
 
-  res.setHeader(
-    "Set-Cookie",
-    stringifyCookie(
-      "refreshToken",
-      token,
-      {
-        httpOnly: true,
-        secure: isProduction,
-        sameSite: "lax",
-        path: "/",
-        maxAge: 30 * 24 * 60 * 60,
-      }
-    )
-  );
+};
 
-}
+export const createAccessTokenCookie = (token) => {
+  return serialize("accessToken", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 15, // 15 Minutes
+  });
+};
 
+export  const createRefreshTokenCookie = (token) => {
+  return serialize("refreshToken", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 30, // 30 Days
+  });
+};
 
-
-export function clearRefreshTokenCookie(res) {
-
-  res.setHeader(
-    "Set-Cookie",
-    stringifyCookie(
-      "refreshToken",
-      "",
-      {
-        httpOnly: true,
-        secure:
-          process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        expires: new Date(0),
-      }
-    )
-  );
-
-}

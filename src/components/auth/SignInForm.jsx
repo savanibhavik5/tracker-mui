@@ -29,60 +29,32 @@ const handleChange = (e) => {
   
 const handleSubmit = async (e) => {
   e.preventDefault();
-
   try {
     setLoading(true);
-
     const response = await axios.post(
       "/api/auth/login",
-      formData
+      formData,
+      {
+        withCredentials: true,
+      }
     );
-
     const data = response.data;
-
-    if (!response.data.success) {
+    if (!data.success) {
       alert(data.message);
-      return;
+     return;
     }
-
-
-    // Save Access Token
-    localStorage.setItem(
-      "accessToken",
-      data.accessToken
-    );
-
-
-    // Save User
-    localStorage.setItem(
-      "user",
-      JSON.stringify(data.user)
-    );
-
-
-    // Callback
+    // Send user data to AuthContext
     if (onLogin) {
       onLogin(data);
     }
-
-
-    // Redirect
-    window.location.href = "/dashboard";
-
-
   } catch (error) {
-
     console.log(error);
-
     alert(
       error.response?.data?.message ||
       "Login failed"
     );
-
   } finally {
-
     setLoading(false);
-
   }
 };
   

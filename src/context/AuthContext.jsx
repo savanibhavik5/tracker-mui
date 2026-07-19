@@ -1,132 +1,70 @@
 import { createContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { jwtDecode } from "jwt-decode";
+import axios from "axios";
+
 export const AuthContext = createContext();
 
-export default function AuthProvider({ children }) {
-  const router = useRouter();
-  const [user, setUser] = useState(null);
-  const [accessToken, setAccessToken] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default function AuthProvider({children}){
+const router = useRouter();
+const [user,setUser]=useState(null);
+const [loading,setLoading]=useState(true);
 
-  const clearAuth = () => {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("refreshToken");
-  localStorage.removeItem("user");
-
-  setAccessToken(null);
-  setUser(null);
-};
-
-//   useEffect(() => {
-//     if (typeof window === "undefined") return;
-
-//     const savedAccessToken = localStorage.getItem("accessToken");
-// const savedUser = localStorage.getItem("user");
-
-// if (savedAccessToken && savedUser) {
-//   try {
-//     const decoded = jwtDecode(savedAccessToken);
-
-//     if (decoded.exp * 1000 > Date.now()) {
-//       setAccessToken(savedAccessToken);
-//       setUser(JSON.parse(savedUser));
-//     } else {
-//      clearAuth();
-//     }
-//   } catch {
-//     clearAuth();
-//   }
-// }
-//     setLoading(false);
-//   }, []);
-
-  useEffect(() => {
-  if (typeof window === "undefined") return;
-
-  const savedAccessToken = localStorage.getItem("accessToken");
-  const savedUser = localStorage.getItem("user");
-
-  console.log("TOKEN:", savedAccessToken);
-  console.log("USER:", savedUser);
-
-  if (savedAccessToken && savedUser) {
-    try {
-
-      const decoded = jwtDecode(savedAccessToken);
-
-      console.log("DECODED TOKEN:", decoded);
-
-      if (decoded.exp * 1000 > Date.now()) {
-
-        setAccessToken(savedAccessToken);
-        setUser(JSON.parse(savedUser));
-
-      } else {
-
-        console.log("TOKEN EXPIRED");
-        clearAuth();
-
-      }
-
-    } catch(error) {
-
-      console.log("JWT ERROR:", error);
-      clearAuth();
-
-    }
-  }
-
-  setLoading(false);
-
-}, []);
+const checkAuth = async()=>{
+try{
+const response = await axios.get(
+"/api/auth/me",
+{
+withCredentials:true
+}
+);
+if(response.data.success){
+setUser(
+response.data.user
+);
+}
+}catch(error){
+setUser(null);
+}finally{
+setLoading(false);
+}
+  };
   
-const login = ({ accessToken, refreshToken, user }) => {
+useEffect(()=>{
+checkAuth();
+},[]);
 
-  if(accessToken){
-    localStorage.setItem(
-      "accessToken",
-      accessToken
-    );
-  }
-
-  if(refreshToken){
-    localStorage.setItem(
-      "refreshToken",
-      refreshToken
-    );
-  }
-
-  if(user){
-    localStorage.setItem(
-      "user",
-      JSON.stringify(user)
-    );
-  }
-
-
-  setAccessToken(accessToken);
-  setUser(user);
-
-  router.replace("/dashboard");
-};
-const logout = () => {
-  clearAuth();
-  router.replace("/login");
+const login = (data)=>{
+setUser(data.user);
+router.replace("/dashboard");
 };
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        accessToken,
-        loading,
-        login,
-        logout,
-        isAuthenticated: !!accessToken,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+const logout = async()=>{
+try{
+await axios.post(
+"/api/auth/logout",
+{},
+{
+withCredentials:true
+}
+);
+}catch(error){
+console.log(error);
+}
+setUser(null);
+router.replace("/login");
+};
+
+return (
+<AuthContext.Provider
+value={{
+user,
+loading,
+login,
+logout,
+isAuthenticated:!!user
+}}
+>
+{children}
+</AuthContext.Provider>
+);
 }
