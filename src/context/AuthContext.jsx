@@ -1,127 +1,129 @@
 import { createContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { jwtDecode } from "jwt-decode";
-
 export const AuthContext = createContext();
-
-const isTokenValid = (token) => {
-  if (!token) return false;
-
-  try {
-    const decodedToken = jwtDecode(token);
-    if (!decodedToken.exp) return false;
-
-    return decodedToken.exp * 1000 > Date.now();
-  } catch {
-    return false;
-  }
-};
 
 export default function AuthProvider({ children }) {
   const router = useRouter();
   const [user, setUser] = useState(null);
-  // const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [accessToken, setAccessToken] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const clearAuth = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setToken(null);
-    setUser(null);
-  };
-// const [user, setUser] = useState(() => {
-//   if (typeof window === "undefined") return null;
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
+  localStorage.removeItem("user");
 
+  setAccessToken(null);
+  setUser(null);
+};
+
+//   useEffect(() => {
+//     if (typeof window === "undefined") return;
+
+//     const savedAccessToken = localStorage.getItem("accessToken");
+// const savedUser = localStorage.getItem("user");
+
+// if (savedAccessToken && savedUser) {
 //   try {
-//     const data = localStorage.getItem("user");
+//     const decoded = jwtDecode(savedAccessToken);
 
-//     if (!data || data === "undefined") {
-//       return null;
+//     if (decoded.exp * 1000 > Date.now()) {
+//       setAccessToken(savedAccessToken);
+//       setUser(JSON.parse(savedUser));
+//     } else {
+//      clearAuth();
 //     }
-
-//     return JSON.parse(data);
-//   } catch (err) {
-//     console.error("Invalid user in localStorage:", err);
-//     localStorage.removeItem("user");
-//     return null;
+//   } catch {
+//     clearAuth();
 //   }
-// });
-
-const [token, setToken] = useState(() => {
-  if (typeof window === "undefined") return null;
-
-  const token = localStorage.getItem("token");
-
-  return token && token !== "undefined" ? token : null;
-});
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-
-    if (storedToken && storedUser && isTokenValid(storedToken)) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
-    } else {
-      clearAuth();
-    }
-
-   
-  }, []);
+// }
+//     setLoading(false);
+//   }, []);
 
   useEffect(() => {
-    if (!token) return;
+  if (typeof window === "undefined") return;
 
+  const savedAccessToken = localStorage.getItem("accessToken");
+  const savedUser = localStorage.getItem("user");
+
+  console.log("TOKEN:", savedAccessToken);
+  console.log("USER:", savedUser);
+
+  if (savedAccessToken && savedUser) {
     try {
-      const decodedToken = jwtDecode(token);
-      if (!decodedToken.exp) {
+
+      const decoded = jwtDecode(savedAccessToken);
+
+      console.log("DECODED TOKEN:", decoded);
+
+      if (decoded.exp * 1000 > Date.now()) {
+
+        setAccessToken(savedAccessToken);
+        setUser(JSON.parse(savedUser));
+
+      } else {
+
+        console.log("TOKEN EXPIRED");
         clearAuth();
-        router.replace("/login");
-        return;
+
       }
 
-      const expiresAt = decodedToken.exp * 1000;
-      const timeout = expiresAt - Date.now();
+    } catch(error) {
 
-      if (timeout <= 0) {
-        clearAuth();
-        router.replace("/login");
-        return;
-      }
-
-      const timer = window.setTimeout(() => {
-        clearAuth();
-        router.replace("/login");
-      }, timeout);
-
-      return () => window.clearTimeout(timer);
-    } catch {
+      console.log("JWT ERROR:", error);
       clearAuth();
-      router.replace("/login");
+
     }
-  }, [token, router]);
+  }
 
-  const login = ({ token, user }) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
-    setToken(token);
-    setUser(user);
-    router.replace("/");
-  };
+  setLoading(false);
 
-  const logout = () => {
-    clearAuth();
-    router.replace("/login");
-  };
+}, []);
+  
+const login = ({ accessToken, refreshToken, user }) => {
+
+  if(accessToken){
+    localStorage.setItem(
+      "accessToken",
+      accessToken
+    );
+  }
+
+  if(refreshToken){
+    localStorage.setItem(
+      "refreshToken",
+      refreshToken
+    );
+  }
+
+  if(user){
+    localStorage.setItem(
+      "user",
+      JSON.stringify(user)
+    );
+  }
+
+
+  setAccessToken(accessToken);
+  setUser(user);
+
+  router.replace("/dashboard");
+};
+const logout = () => {
+  clearAuth();
+  router.replace("/login");
+};
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        token,
+        accessToken,
         loading,
         login,
         logout,
-        isAuthenticated: !!token,
+        isAuthenticated: !!accessToken,
       }}
     >
       {children}

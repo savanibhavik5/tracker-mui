@@ -1,16 +1,20 @@
-import axios from "axios";
-
-const api = axios.create({
-  baseURL: "/api/auth",
-});
+import api from "./api";
 
 const AuthService = {
-  register(data) {
-    return api.post("/register", data);
+   login(data) {
+    return api.post("/auth/login", data);
   },
 
-  login(data) {
-    return api.post("/login", data);
+  register(data) {
+    return api.post("/auth/register", data);
+  },
+
+  refreshToken() {
+    return api.post("/auth/refreshToken");
+  },
+
+   logout() {
+    return api.post("/auth/logout");
   },
 };
 

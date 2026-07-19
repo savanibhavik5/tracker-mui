@@ -6,6 +6,7 @@ import Button from "@/components/ui/button/Button";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
 import React, { useState } from "react";
+import axios from "axios";
 
 export default function SignInForm({ onLogin }) {
 
@@ -32,36 +33,58 @@ const handleSubmit = async (e) => {
   try {
     setLoading(true);
 
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const response = await axios.post(
+      "/api/auth/login",
+      formData
+    );
 
-    const data = await response.json();
+    const data = response.data;
 
-    if (!response.ok) {
+    if (!response.data.success) {
       alert(data.message);
       return;
     }
 
-    // Token save
-    localStorage.setItem("token", data.token);
 
-    // Parent component callback
+    // Save Access Token
+    localStorage.setItem(
+      "accessToken",
+      data.accessToken
+    );
+
+
+    // Save User
+    localStorage.setItem(
+      "user",
+      JSON.stringify(data.user)
+    );
+
+
+    // Callback
     if (onLogin) {
       onLogin(data);
     }
 
-  } catch (err) {
-    console.log(err);
-    alert("Login failed");
+
+    // Redirect
+    window.location.href = "/dashboard";
+
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert(
+      error.response?.data?.message ||
+      "Login failed"
+    );
+
   } finally {
+
     setLoading(false);
+
   }
-  };
+};
   
 
 
@@ -69,9 +92,9 @@ return (
   <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
     <div>
       <div className="mb-5 sm:mb-8">
-        <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
+        <h2 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90">
           Sign In
-        </h1>
+        </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Enter your email and password to sign in!
         </p>

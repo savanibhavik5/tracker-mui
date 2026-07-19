@@ -1,18 +1,43 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import useAuth from "@/hooks/useAuth";
 
-const PUBLIC_ROUTES = ["/login", "/signup", "/forgot-password"];
+const PUBLIC_ROUTES = [
+  "/login",
+  "/signup",
+  "/forgot-password"
+];
 
 export default function AuthGuard({ children }) {
+
   const router = useRouter();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+  const { accessToken, loading } = useAuth();
 
-    if (!token && !PUBLIC_ROUTES.includes(router.pathname)) {
+
+  useEffect(() => {
+
+    if (
+      !loading &&
+      !accessToken &&
+      !PUBLIC_ROUTES.includes(router.pathname)
+    ) {
+
       router.replace("/login");
+
     }
-  }, [router]);
+
+  }, [
+    loading,
+    accessToken,
+    router
+  ]);
+
+
+  if(loading){
+    return null;
+  }
+
 
   return children;
 }

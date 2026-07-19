@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
     "@react-jvectormap/core",
     "@react-jvectormap/world",
   ],
+   allowedDevOrigins: [
+    "192.168.1.151",
+  ],
 
   turbopack: {
     rules: {
