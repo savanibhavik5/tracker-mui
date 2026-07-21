@@ -7,16 +7,11 @@ import {
   BoxIconLine,
 } from "@/icons";
 
-export const EcommerceMetrics = ({
-  summary,
-  bankBalances = [],
-}) => {
-
+export const EcommerceMetrics = ({ summary, bankBalances = [] }) => {
   const totalAccounts = bankBalances.length;
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 md:gap-6">
-
       {/* Income */}
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
         <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-green-100">
@@ -24,11 +19,11 @@ export const EcommerceMetrics = ({
         </div>
 
         <div className="mt-5">
-          <span className="text-sm text-gray-500">
+          <span className="text-sm  dark:text-gray-400">
             Total Income
           </span>
 
-          <h4 className="mt-2 text-2xl font-bold">
+          <h4 className="mt-2 text-2xl  dark:text-gray-400 font-bold">
             ₹{summary?.totalIncome?.toLocaleString()}
           </h4>
         </div>
@@ -41,11 +36,9 @@ export const EcommerceMetrics = ({
         </div>
 
         <div className="mt-5">
-          <span className="text-sm text-gray-500">
-            Total Expense
-          </span>
+          <span className="text-sm dark:text-gray-400">Total Expense</span>
 
-          <h4 className="mt-2 text-2xl font-bold">
+          <h4 className="mt-2 text-2xl dark:text-gray-400 font-bold">
             ₹{summary?.totalExpense?.toLocaleString()}
           </h4>
         </div>
@@ -58,11 +51,9 @@ export const EcommerceMetrics = ({
         </div>
 
         <div className="mt-5">
-          <span className="text-sm text-gray-500">
-            Total Balance
-          </span>
+          <span className="text-sm dark:text-gray-400">Total Balance</span>
 
-          <h4 className="mt-2 text-2xl font-bold">
+          <h4 className="mt-2 text-2xl dark:text-gray-400 font-bold">
             ₹{summary?.totalBalance?.toLocaleString()}
           </h4>
         </div>
@@ -75,16 +66,15 @@ export const EcommerceMetrics = ({
         </div>
 
         <div className="mt-5">
-          <span className="text-sm text-gray-500">
+          <span className="text-sm dark:text-gray-400">
             Total Accounts
           </span>
 
-          <h4 className="mt-2 text-2xl font-bold">
+          <h4 className="mt-2 text-2xl dark:text-gray-400 font-bold">
             {totalAccounts}
           </h4>
         </div>
       </div>
-
     </div>
   );
 };

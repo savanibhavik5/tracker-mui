@@ -34,7 +34,6 @@ export default function Ecommerce() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          bgcolor: "#101828",
         }}
       >
         <CircularProgress size={60} />
@@ -58,9 +57,9 @@ export default function Ecommerce() {
         <MonthlySalesChart data={data?.monthlyChart} />
       </div>
 
-      <div className="col-span-12 xl:col-span-5">
+      {/* <div className="col-span-12 xl:col-span-5">
         <MonthlyTarget summary={data?.summary} />
-      </div>
+      </div> */}
 
       <div className="col-span-12">
         <StatisticsChart data={data?.categoryChart} />
