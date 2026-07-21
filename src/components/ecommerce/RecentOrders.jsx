@@ -200,6 +200,8 @@
 //   );
 // }
 
+import { useState } from "react";
+
 import {
   Table,
   TableBody,
@@ -207,63 +209,93 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+
 import Badge from "../ui/badge/Badge";
 
 export default function RecentOrders({ transactions = [] }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  // Kitne records ek page par dikhane hain
+  const itemsPerPage = 10;
+  // Total pages
+  const totalPages = Math.ceil(transactions.length / itemsPerPage);
+  // Current page ke records
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentTransactions = transactions.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
+  // Page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  // Previous
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+  // Next
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="flex items-center justify-between px-6 py-5">
+      {/* Header */}
+      <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5 dark:border-gray-800">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
           Recent Transactions
         </h3>
 
-        <button className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
+        <button className="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
           See All
         </button>
       </div>
 
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader className="border-y border-gray-100 dark:border-gray-800">
+      {/* Table */}
+      <div className="w-full overflow-x-auto">
+        <Table className="w-full min-w-[900px]">
+          <TableHeader className="border-b border-gray-100 dark:border-gray-800">
             <TableRow>
               <TableCell
                 isHeader
-                className="py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400"
+                className="w-[16%] whitespace-nowrap px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400"
               >
                 Date
               </TableCell>
 
               <TableCell
                 isHeader
-                className="py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400"
+                className="w-[20%] px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400"
               >
                 Category
               </TableCell>
 
               <TableCell
                 isHeader
-                className="py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400"
+                className="w-[18%] px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400"
               >
                 Bank
               </TableCell>
 
               <TableCell
                 isHeader
-                className="py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400"
+                className="w-[18%] px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400"
               >
                 Payment
               </TableCell>
 
               <TableCell
                 isHeader
-                className="py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400"
+                className="w-[16%] px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400"
               >
                 Amount
               </TableCell>
 
               <TableCell
                 isHeader
-                className="py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400"
+                className="w-[12%] px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400"
               >
                 Type
               </TableCell>
@@ -271,46 +303,49 @@ export default function RecentOrders({ transactions = [] }) {
           </TableHeader>
 
           <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-            {transactions.length === 0 ? (
+            {currentTransactions.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={6}
-                  className="py-8 text-center text-gray-500 dark:text-gray-400"
+                  className="px-6 py-8 text-center text-gray-500 dark:text-gray-400"
                 >
                   No Transactions Found
                 </TableCell>
               </TableRow>
             ) : (
-              transactions.map((item) => (
+              currentTransactions.map((item) => (
                 <TableRow key={item.transactionUUID}>
-                  <TableCell className="py-4">
-                    <span className=" text-sm text-gray-700 dark:text-gray-300">
-                      {item.date}
-                    </span>
+                  {/* Date */}
+                  <TableCell className="whitespace-nowrap px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                    {item.date}
                   </TableCell>
 
-                  <TableCell className="py-4">
+                  {/* Category */}
+                  <TableCell className="px-6 py-4">
                     <div>
-                      <p className="text-sm text-gray-800 dark:text-white">
+                      <p className="text-sm font-medium text-gray-800 dark:text-white">
                         {item.category}
                       </p>
 
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
                         {item.subCategory}
                       </p>
                     </div>
                   </TableCell>
 
-                  <TableCell className="py-4 text-sm text-gray-700 dark:text-gray-300">
-                    {item?.accountUUID}
+                  {/* Bank */}
+                  <TableCell className="whitespace-nowrap px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
+                    {item.accountUUID}
                   </TableCell>
 
-                  <TableCell className="py-4 text-sm  text-gray-700 dark:text-gray-300">
+                  {/* Payment */}
+                  <TableCell className="whitespace-nowrap px-6 py-4 text-sm text-gray-700 dark:text-gray-300">
                     {item.paymentMode}
                   </TableCell>
 
+                  {/* Amount */}
                   <TableCell
-                    className={`py-4 text-sm text-right font-semibold ${
+                    className={`whitespace-nowrap px-6 py-4 text-right text-sm font-semibold ${
                       item.financeType === "Income"
                         ? "text-green-600"
                         : "text-red-500"
@@ -320,7 +355,8 @@ export default function RecentOrders({ transactions = [] }) {
                     {Number(item.amount).toLocaleString("en-IN")}
                   </TableCell>
 
-                  <TableCell className="text-sm py-4 text-center">
+                  {/* Type */}
+                  <TableCell className="px-6 py-4 text-center">
                     <Badge
                       size="sm"
                       color={
@@ -336,6 +372,62 @@ export default function RecentOrders({ transactions = [] }) {
           </TableBody>
         </Table>
       </div>
+
+      {/* Pagination */}
+      {transactions.length > 0 && (
+        <div className="flex items-center justify-between border-t border-gray-100 px-6 py-4 dark:border-gray-800">
+          {/* Showing text */}
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Showing
+            <span className="font-medium text-gray-700 dark:text-gray-300">
+              {startIndex + 1}
+            </span>
+            to
+            <span className="font-medium text-gray-700 dark:text-gray-300">
+              {Math.min(startIndex + itemsPerPage, transactions.length)}
+            </span>
+            of
+            <span className="font-medium text-gray-700 dark:text-gray-300">
+              {transactions.length}
+            </span>
+            transactions
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handlePrevious}
+              disabled={currentPage === 1}
+              className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+            >
+              Previous
+            </button>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: totalPages }, (_, index) => {
+                const pageNumber = index + 1;
+                return (
+                  <button
+                    key={pageNumber}
+                    onClick={() => handlePageChange(pageNumber)}
+                    className={`h-9 min-w-9 rounded-lg px-3 text-sm transition ${
+                      currentPage === pageNumber
+                        ? "bg-brand-500 text-white"
+                        : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+                    }`}
+                  >
+                    {pageNumber}
+                  </button>
+                );
+              })}
+            </div>
+            <button
+              onClick={handleNext}
+              disabled={currentPage === totalPages}
+              className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
