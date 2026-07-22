@@ -378,19 +378,19 @@ export default function RecentOrders({ transactions = [] }) {
         <div className="flex items-center justify-between border-t border-gray-100 px-6 py-4 dark:border-gray-800">
           {/* Showing text */}
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Showing
+            Showing&nbsp;
             <span className="font-medium text-gray-700 dark:text-gray-300">
-              {startIndex + 1}
+              {startIndex + 1}&nbsp;
             </span>
-            to
+            to&nbsp;
             <span className="font-medium text-gray-700 dark:text-gray-300">
-              {Math.min(startIndex + itemsPerPage, transactions.length)}
+              {Math.min(startIndex + itemsPerPage, transactions.length)}&nbsp;
             </span>
-            of
+            of&nbsp;
             <span className="font-medium text-gray-700 dark:text-gray-300">
-              {transactions.length}
+              {transactions.length}&nbsp;
             </span>
-            transactions
+            &nbsp;transactions
           </p>
           <div className="flex items-center gap-2">
             <button
