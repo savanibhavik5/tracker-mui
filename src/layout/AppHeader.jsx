@@ -162,7 +162,7 @@ const AppHeader = () => {
         >
           <div className="flex items-center gap-2 2xsm:gap-3">
             <ThemeToggleButton />
-            <NotificationDropdown />
+            {/* <NotificationDropdown /> */}
           </div>
           <UserDropdown />
         </div>
