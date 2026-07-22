@@ -52,19 +52,15 @@ export default function Ecommerce() {
       <div className="col-span-12">
         <BankBalanceCards banks={data?.bankBalances} />
       </div>
-
       <div className="col-span-12 xl:col-span-7">
         <MonthlySalesChart data={data?.monthlyChart} />
       </div>
-
       {/* <div className="col-span-12 xl:col-span-5">
         <MonthlyTarget summary={data?.summary} />
       </div> */}
-
       <div className="col-span-12">
         <StatisticsChart data={data?.categoryChart} />
       </div>
-
       <div className="col-span-12">
         <RecentOrders transactions={data?.recentTransactions} />
       </div>

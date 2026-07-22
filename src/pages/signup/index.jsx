@@ -22,7 +22,6 @@ export default function SignUp() {
       <Head>
         <title>Sign Up</title>
       </Head>
-
       <AuthLayout title="Create Account" subtitle="SignUP to continue">
         <SignUpForm />
       </AuthLayout>
