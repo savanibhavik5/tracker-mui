@@ -2,7 +2,6 @@ import React from "react";
 // import { BanknotesIcon } from "@heroicons/react/24/outline";
 
 export default function BankBalanceCards({ banks = [] }) {
-  console.log(banks)
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4 md:gap-6">
       {banks.map((bank) => (
