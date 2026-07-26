@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { useContext } from "react";
@@ -9,6 +9,7 @@ import { AuthContext } from "@/context/AuthContext";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownWrapperRef = useRef(null);
 
   const auth = useContext(AuthContext);
   const user = auth?.user;
@@ -35,8 +36,27 @@ export default function UserDropdown() {
     await logout?.();
   }
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleOutsideClick = (event) => {
+      if (
+        dropdownWrapperRef.current &&
+        !dropdownWrapperRef.current.contains(event.target)
+      ) {
+        closeDropdown();
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isOpen]);
+
   return (
-    <div className="relative">
+    <div ref={dropdownWrapperRef} className="relative">
       <button
         onClick={toggleDropdown}
         className="flex items-center text-gray-700 dark:text-gray-400 dropdown-toggle"

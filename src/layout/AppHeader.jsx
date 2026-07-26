@@ -9,6 +9,8 @@ import React, { useState, useEffect, useRef } from "react";
 
 const AppHeader = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
+  const applicationMenuRef = useRef(null);
+  const applicationMenuButtonRef = useRef(null);
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
@@ -39,6 +41,31 @@ const AppHeader = () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isApplicationMenuOpen) return;
+
+    const handleOutsideClick = (event) => {
+      const target = event.target;
+      const isMobile = window.innerWidth < 1024;
+
+      if (!isMobile) return;
+      if (
+        applicationMenuRef.current?.contains(target) ||
+        applicationMenuButtonRef.current?.contains(target)
+      ) {
+        return;
+      }
+
+      setApplicationMenuOpen(false);
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [isApplicationMenuOpen]);
 
   return (
     <header className="sticky top-0 flex w-full bg-white border-gray-200 z-99999 dark:border-gray-800 dark:bg-gray-900 lg:border-b">
@@ -101,6 +128,7 @@ const AppHeader = () => {
           </Link>
 
           <button
+            ref={applicationMenuButtonRef}
             onClick={toggleApplicationMenu}
             className="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-99999 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden"
           >
@@ -156,6 +184,7 @@ const AppHeader = () => {
           </div>
         </div>
         <div
+          ref={applicationMenuRef}
           className={`${
             isApplicationMenuOpen ? "flex" : "hidden"
           } items-center justify-end w-full gap-4 px-5 py-4 lg:flex shadow-theme-md lg:justify-end lg:px-0 lg:shadow-none`}
